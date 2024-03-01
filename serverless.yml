@@ -1,4 +1,4 @@
-service: aws-node-typescript-sqs-standard
+service: lambda-notification
 
 frameworkVersion: "3"
 
@@ -9,10 +9,17 @@ custom:
     target: node20
   enterprise:
     collectLambdaLogs: false
-  sqs: arn:aws:sqs:us-east-1:891377350988:serveless
   stages:
     - dev
     - prod
+
+params:
+  default:
+    sqs: "${ssm:queue-notificacao-prd}"
+  prod:
+    sqs: "${ssm:queue-notificacao-prd}"
+  dev:
+    sqs: "${ssm:queue-notificacao-dev}"
 
 plugins:
   - serverless-esbuild
@@ -24,12 +31,11 @@ provider:
   timeout: 30
   stage: ${opt:stage, 'dev'}
   environment: ${file(serverless/environment.yml)}
-  iam:
-    role: arn:aws:iam::891377350988:role/LabRole
-      
+   
 functions:
   receiver:
     handler: src/receiver.handler
     events:
-      - sqs: ${self:custom.sqs}
+      - sqs: ${param:sqs}
+
   

@@ -8,12 +8,11 @@ const consumeSqsMessage = async (event: SQSEvent) => {
         for (const record of event.Records) {
             const messageBody = JSON.parse(record.body || "{}");
             console.log('Received message:', messageBody);
-            console.log(messageBody.clienteNome)
             
             const messageEmail = messageBody.clienteEmail.props.address
             const messageNome = messageBody.clienteNome
             const messageStatus = messageBody.statusPedido
-            const messagePedido = messageBody.messageStatus
+            const messagePedido = messageBody.pedidoId
             const isValidEmail = assertArgumentIsValidEmail(messageEmail)
             const isValidStatus = assertArgumentIsValidStatus(messageStatus)
 
@@ -25,6 +24,7 @@ const consumeSqsMessage = async (event: SQSEvent) => {
                 console.error("Skipping message: Incorrect status value");
                 continue;
             }
+
             const mailMessage = {
                 id: messagePedido, 
                 recipient: messageEmail,

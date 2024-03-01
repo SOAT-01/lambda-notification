@@ -8,10 +8,18 @@ export class EmailUseCase {
 		this.emailSender = new EmailSender();
 	}
 
-	async sendEmail(message: { recipient: string; name: string; status: string }): Promise<void> {
-		const { recipient, name, status} = message;
-		const body = 'E-mail sucesso enviado'
-		const subject = 'Pedido aprovado'
-		await this.emailSender.sendEmail(recipient, name, subject, body);
+	async sendEmail(message: { id: string; recipient: string; name: string; status: string }): Promise<void> {
+		const { id, recipient, name, status} = message;
+		let subject, body
+		if (status === 'recebido') {
+			subject = 'Pedido recebido!'
+			body = `Seu pedido #${id} foi recebido, e em breve estará pronto.`
+		}
+		else {
+			subject = 'Pedido cancelado!'
+			body = `Seu pedido #${id} foi cancelado devido a problemas no pagamento, por favor, tente novamente usando outro método de pagamento.`
+		}
+		const htmlMsg = `<html><head></head><body><p>Olá ${name},</p>${body}</p></body></html>`
+		await this.emailSender.sendEmail(recipient, name, subject, htmlMsg);
 	}
 }
