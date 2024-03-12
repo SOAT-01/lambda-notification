@@ -4,6 +4,6 @@ export const assertArgumentIsValidEmail = (email: string) => {
 };
 
 export const assertArgumentIsValidStatus = (status: string) => {
-    const acceptedStatus = ["recebido", "cancelado"]
+    const acceptedStatus = ["em_preparacao", "cancelado"]
     return acceptedStatus.includes(status)
 };
