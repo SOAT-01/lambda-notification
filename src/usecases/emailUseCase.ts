@@ -11,9 +11,9 @@ export class EmailUseCase {
 	async sendEmail(message: { id: string; recipient: string; name: string; status: string }): Promise<void> {
 		const { id, recipient, name, status} = message;
 		let subject, body
-		if (status === 'recebido') {
-			subject = 'Pedido recebido!'
-			body = `Seu pedido #${id} foi recebido, e em breve estará pronto.`
+		if (status === 'em_preparacao') {
+			subject = 'Pedido confirmado!'
+			body = `Seu pedido #${id} foi recebido, e em breve estará pronto para retirada.`
 		}
 		else {
 			subject = 'Pedido cancelado!'
